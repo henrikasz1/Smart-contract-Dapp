@@ -5,6 +5,7 @@ import './App.css';
 import Shop from '../abis/Marketplace.json';
 import Sell from './Sell';
 import List from './List';
+import OwnedList from './OwnedList';
 
 class App extends Component {
   //live cycle method
@@ -39,9 +40,9 @@ class App extends Component {
     this.setState({acc: acc[0]})
 
     //dinamically find the address of network
-    // const netId = await web3.eth.net.getId()
-    // const address = Shop.networks[netId]
-    const address = Shop.networks[5777].address
+    const netId = await web3.eth.net.getId()
+    const address = Shop.networks[netId].address
+  //  const address = Shop.networks[42].address
     //fetching abi
     const abi = Shop.abi
     const shop = new web3.eth.Contract(abi, address)
@@ -54,7 +55,16 @@ class App extends Component {
     for (var i = 1; i <= counter; i++)
     {
       const pr = await shop.methods.products(i).call()
-      this.setState({products: [...this.state.products, pr]})
+
+      if (pr.purchased == false)
+      {
+        this.setState({products: [...this.state.products, pr]})
+      }
+      else if (pr.purchased == true && pr.owner == this.state.acc)
+      {
+        this.setState({ownedProducts: [...this.state.ownedProducts, pr]})
+      }
+      // else if (pr.purchased == true && pr2 )
     }
   }
 
@@ -63,6 +73,8 @@ class App extends Component {
     this.state = {
       acc: '',
       products: [],
+      ownedProducts: [],
+      soldProducts: [],
       counter: 0
     }
     //Lets the JSX use the function
@@ -93,7 +105,8 @@ class App extends Component {
         </div>
 
         <Sell sellProduct={this.sellProduct} />
-        <List products={this.state.products} buyProduct={this.buyProduct} shop={this.state.shop}/>
+        <List products={this.state.products} buyProduct={this.buyProduct} account={this.state.acc}/>
+        <OwnedList ownedProducts={this.state.ownedProducts}/>
       </div>
     );
   }

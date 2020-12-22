@@ -30,10 +30,6 @@ contract Marketplace {
       bool purchased
     );
 
-    // constructor() public {
-    //     name = "Dapp University Marketplace";
-    // }
-
     function addProduct(string memory _name, uint _price) public{
       // check the length to the name
       require(bytes(_name).length > 2);

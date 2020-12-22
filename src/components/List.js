@@ -27,7 +27,7 @@ class List extends Component {
                   <td>{window.web3.utils.fromWei(product.price.toString(), 'Ether')} ETH</td>
                   <td>{product.owner}</td>
                   <td>
-                    { !product.purchased ?
+                    { this.props.account != product.owner ?
                       <button name={product.id} value={product.price} className="btn btn-success"
                         onClick={(e) =>
                           {
@@ -37,7 +37,7 @@ class List extends Component {
                           }
                         }
                         >Buy</button>
-                        : <h5> Owned </h5>
+                        : <h5 style={{color: 'red'}}> Your product </h5>
                     }
                   </td>
                 </tr>

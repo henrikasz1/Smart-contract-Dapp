@@ -9,7 +9,7 @@ class Sell extends Component {
         <h4 className="text-center"> Sell a product </h4>
       </div>
       <form onSubmit={(e) => {
-        // e.preventDefault()
+        e.preventDefault()
         const name = this.prName.value
         const price = window.web3.utils.toWei(this.prPrice.value.toString(), 'Ether')
         this.props.sellProduct(name, price)
